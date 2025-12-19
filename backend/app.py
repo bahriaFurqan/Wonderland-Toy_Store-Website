@@ -38,12 +38,19 @@ CORS(app)
 
 # Import routes
 from routes import product_routes, user_routes, cart_routes, order_routes
+from routes import admin_products, admin_orders, admin_users, admin_analytics
 
 # Register blueprints
 app.register_blueprint(product_routes.bp)
 app.register_blueprint(user_routes.bp)
 app.register_blueprint(cart_routes.bp)
 app.register_blueprint(order_routes.bp)
+
+# Register admin blueprints
+app.register_blueprint(admin_products.admin_products_bp)
+app.register_blueprint(admin_orders.admin_orders_bp)
+app.register_blueprint(admin_users.admin_users_bp)
+app.register_blueprint(admin_analytics.admin_analytics_bp)
 
 @app.route('/')
 def index():

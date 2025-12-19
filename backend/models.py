@@ -13,6 +13,7 @@ class User(db.Model):
     last_name = db.Column(db.String(50))
     phone = db.Column(db.String(20))
     address = db.Column(db.Text)
+    is_admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
@@ -34,6 +35,7 @@ class User(db.Model):
             'last_name': self.last_name,
             'phone': self.phone,
             'address': self.address,
+            'is_admin': self.is_admin,
             'created_at': self.created_at.isoformat()
         }
 

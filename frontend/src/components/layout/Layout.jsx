@@ -57,11 +57,35 @@ const Layout = ({ children }) => {
             href: '/cart',
             ariaLabel: 'Shopping Cart'
         },
-        {
-            label: isAuthenticated ? (user?.first_name || user?.username || 'User') : 'Login',
-            href: isAuthenticated ? '/profile' : '/login',
-            ariaLabel: isAuthenticated ? 'User Profile' : 'Login'
-        }
+        ...(isAuthenticated ? [
+            {
+                label: user?.first_name || user?.username || 'User',
+                href: '/profile',
+                ariaLabel: 'User Profile'
+            },
+            ...(user?.is_admin ? [{
+                label: 'Admin Portal',
+                href: '/admin/dashboard',
+                ariaLabel: 'Admin Portal'
+            }] : []),
+            {
+                label: 'Logout',
+                component: (
+                    <button
+                        onClick={logout}
+                        className="px-4 py-2 hover:opacity-80 transition-opacity text-sm font-medium"
+                    >
+                        Logout
+                    </button>
+                )
+            }
+        ] : [
+            {
+                label: 'Login',
+                href: '/login',
+                ariaLabel: 'Login'
+            }
+        ])
     ];
 
     // Simple logo element
