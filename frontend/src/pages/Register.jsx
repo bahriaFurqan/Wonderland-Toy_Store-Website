@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ButtonHoverTopFlip from '../components/common/ButtonHoverTopFlip';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -208,13 +209,13 @@ const Register = () => {
                             </div>
                         </div>
 
-                        <button
+                        <ButtonHoverTopFlip
                             type="submit"
                             disabled={loading}
-                            className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full"
                         >
                             {loading ? 'Creating account...' : 'Create Account'}
-                        </button>
+                        </ButtonHoverTopFlip>
                     </form>
 
                     <div className="mt-6 text-center">

@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import { Search, Filter, Star } from 'lucide-react';
+import { ParticleCard, GlobalSpotlight } from '../components/common/MagicBento';
+import ButtonHoverTopFlip from '../components/common/ButtonHoverTopFlip';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -10,6 +12,7 @@ const Products = () => {
     const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
     const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
     const [selectedAgeRange, setSelectedAgeRange] = useState(searchParams.get('age_range') || '');
+    const gridRef = useRef(null);
 
     const categories = ['Action Figures', 'Dolls', 'Building Blocks', 'Educational', 'Vehicles', 'Puzzles', 'Board Games', 'Outdoor Toys'];
     const ageRanges = ['0-2 years', '3-5 years', '6-8 years', '9-12 years', '13+ years'];
@@ -64,6 +67,14 @@ const Products = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 py-8">
+            {/* Global Spotlight Effect */}
+            <GlobalSpotlight
+                gridRef={gridRef}
+                enabled={true}
+                spotlightRadius={300}
+                glowColor="255, 107, 157"
+            />
+
             <div className="container mx-auto px-4">
                 {/* Header */}
                 <div className="mb-8">
@@ -88,9 +99,9 @@ const Products = () => {
                                 className="input-field pl-10"
                             />
                         </div>
-                        <button type="submit" className="btn-primary">
+                        <ButtonHoverTopFlip type="submit">
                             Search
-                        </button>
+                        </ButtonHoverTopFlip>
                     </form>
                 </div>
 
@@ -160,7 +171,7 @@ const Products = () => {
                     </div>
 
                     {/* Products Grid */}
-                    <div className="lg:col-span-3">
+                    <div className="lg:col-span-3 bento-section" ref={gridRef}>
                         {loading ? (
                             <div className="text-center py-12">
                                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -173,54 +184,62 @@ const Products = () => {
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {products.map((product) => (
-                                        <Link
+                                        <ParticleCard
                                             key={product.id}
-                                            to={`/products/${product.id}`}
-                                            className="card overflow-hidden group"
+                                            particleCount={8}
+                                            glowColor="255, 107, 157"
+                                            enableTilt={true}
+                                            clickEffect={true}
+                                            enableMagnetism={true}
                                         >
-                                            <div className="aspect-square bg-gray-100 overflow-hidden">
-                                                <img
-                                                    src={product.image_url || 'https://via.placeholder.com/300'}
-                                                    alt={product.name}
-                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                                />
-                                            </div>
-                                            <div className="p-4">
-                                                {product.category && (
-                                                    <span className="inline-block px-2 py-1 bg-primary-100 text-primary-600 text-xs font-medium rounded mb-2">
-                                                        {product.category}
-                                                    </span>
-                                                )}
-                                                <h3 className="font-display font-semibold text-lg text-gray-800 mb-2 line-clamp-2">
-                                                    {product.name}
-                                                </h3>
-                                                <div className="flex items-center mb-2">
-                                                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                                    <span className="ml-1 text-sm text-gray-600">
-                                                        {product.rating || 5.0}
-                                                    </span>
+                                            <Link
+                                                to={`/products/${product.id}`}
+                                                className="card overflow-hidden group block h-full"
+                                            >
+                                                <div className="aspect-square bg-gray-100 overflow-hidden">
+                                                    <img
+                                                        src={product.image_url || 'https://via.placeholder.com/300'}
+                                                        alt={product.name}
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                    />
                                                 </div>
-                                                <div className="flex items-center justify-between">
-                                                    <p className="text-2xl font-bold text-primary-600">
-                                                        ${product.price.toFixed(2)}
-                                                    </p>
-                                                    {product.stock_quantity > 0 ? (
-                                                        <span className="text-sm text-green-600">In Stock</span>
-                                                    ) : (
-                                                        <span className="text-sm text-red-600">Out of Stock</span>
+                                                <div className="p-4">
+                                                    {product.category && (
+                                                        <span className="inline-block px-2 py-1 bg-primary-100 text-primary-600 text-xs font-medium rounded mb-2">
+                                                            {product.category}
+                                                        </span>
                                                     )}
+                                                    <h3 className="font-display font-semibold text-lg text-gray-800 mb-2 line-clamp-2">
+                                                        {product.name}
+                                                    </h3>
+                                                    <div className="flex items-center mb-2">
+                                                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                                        <span className="ml-1 text-sm text-gray-600">
+                                                            {product.rating || 5.0}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="text-2xl font-bold text-primary-600">
+                                                            ${product.price.toFixed(2)}
+                                                        </p>
+                                                        {product.stock_quantity > 0 ? (
+                                                            <span className="text-sm text-green-600">In Stock</span>
+                                                        ) : (
+                                                            <span className="text-sm text-red-600">Out of Stock</span>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Link>
+                                            </Link>
+                                        </ParticleCard>
                                     ))}
                                 </div>
                             </>
                         ) : (
                             <div className="text-center py-12 card">
                                 <p className="text-xl text-gray-600 mb-4">No products found</p>
-                                <button onClick={clearFilters} className="btn-primary">
+                                <ButtonHoverTopFlip onClick={clearFilters}>
                                     Clear Filters
-                                </button>
+                                </ButtonHoverTopFlip>
                             </div>
                         )}
                     </div>

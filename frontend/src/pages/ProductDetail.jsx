@@ -7,6 +7,7 @@ import { Star, ShoppingCart, Check, Truck, Shield } from 'lucide-react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { BuildingBlock } from '../components/three/ToyModel3D';
+import ButtonHoverTopFlip from '../components/common/ButtonHoverTopFlip';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -115,8 +116,8 @@ const ProductDetail = () => {
                                     <Star
                                         key={i}
                                         className={`w-5 h-5 ${i < Math.floor(product.rating || 5)
-                                                ? 'text-yellow-400 fill-current'
-                                                : 'text-gray-300'
+                                            ? 'text-yellow-400 fill-current'
+                                            : 'text-gray-300'
                                             }`}
                                     />
                                 ))}
@@ -190,10 +191,10 @@ const ProductDetail = () => {
                         </div>
 
                         {/* Add to Cart Button */}
-                        <button
+                        <ButtonHoverTopFlip
                             onClick={handleAddToCart}
                             disabled={product.stock_quantity === 0 || addedToCart}
-                            className="btn-primary w-full mb-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            className="w-full mb-4"
                         >
                             {addedToCart ? (
                                 <>
@@ -206,7 +207,7 @@ const ProductDetail = () => {
                                     Add to Cart
                                 </>
                             )}
-                        </button>
+                        </ButtonHoverTopFlip>
 
                         {/* Features */}
                         <div className="grid grid-cols-2 gap-4 mt-8">

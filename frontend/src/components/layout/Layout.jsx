@@ -1,8 +1,20 @@
-import Header from './Header';
 import Footer from './Footer';
 import BubbleMenu from '../common/BubbleMenu';
+import PillNav from '../common/PillNav';
+import { Link, useLocation } from 'react-router-dom';
+import { ShoppingCart, User, Search } from 'lucide-react';
+import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 
 const Layout = ({ children }) => {
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const { user, isAuthenticated, logout } = useAuth();
+    const { getCartCount } = useCart();
+    const location = useLocation();
+
+    const logoElement = '🧸';
+
     const menuItems = [
         {
             label: 'home',
@@ -34,9 +46,62 @@ const Layout = ({ children }) => {
         }
     ];
 
+    const pillNavItems = [
+        {
+            label: 'Search',
+            href: '/search',
+            ariaLabel: 'Search'
+        },
+        {
+            label: 'Cart',
+            href: '/cart',
+            ariaLabel: 'Shopping Cart'
+        },
+        {
+            label: isAuthenticated ? (user?.first_name || user?.username || 'User') : 'Login',
+            href: isAuthenticated ? '/profile' : '/login',
+            ariaLabel: isAuthenticated ? 'User Profile' : 'Login'
+        }
+    ];
+
+    // Simple logo element
+    const logoComponent = (
+        <div className="w-full h-full bg-gradient-primary rounded-full flex items-center justify-center">
+            <span className="text-2xl">🧸</span>
+        </div>
+    );
+
     return (
         <div className="min-h-screen flex flex-col">
-            {/* Fixed BubbleMenu on left side - below header */}
+            {/* PillNav at top */}
+            <div className="fixed top-4 left-0 right-0 z-[9998] flex justify-center">
+                <PillNav
+                    logo={logoComponent}
+                    logoAlt="ToyStore"
+                    items={pillNavItems}
+                    activeHref={location.pathname}
+                    baseColor="#ff6b9d"
+                    pillColor="#ffffff"
+                    hoveredPillTextColor="#ffffff"
+                    pillTextColor="#111111"
+                    ease="power2.easeOut"
+                    initialLoadAnimation={true}
+                />
+            </div>
+
+            {/* Search Bar (Expandable) */}
+            {isSearchOpen && (
+                <div className="fixed top-16 left-1/2 -translate-x-1/2 z-[9997] w-full max-w-md px-4">
+                    <input
+                        type="text"
+                        placeholder="Search for toys..."
+                        className="input-field w-full shadow-lg"
+                        autoFocus
+                    />
+                </div>
+            )}
+
+            {/* Fixed BubbleMenu on left side */}
             <div className="fixed left-4 top-24 z-[9999]">
                 <BubbleMenu
                     items={menuItems}
@@ -50,8 +115,7 @@ const Layout = ({ children }) => {
                 />
             </div>
 
-            <Header />
-            <main className="flex-grow">
+            <main className="flex-grow pt-20">
                 {children}
             </main>
             <Footer />
