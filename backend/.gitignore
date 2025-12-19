@@ -4,8 +4,8 @@ __pycache__/
 *$py.class
 *.so
 .Python
-
-
+venv/
+env/
 ENV/
 build/
 develop-eggs/
@@ -24,6 +24,8 @@ wheels/
 *.egg
 
 # Environment variables
+.env
+.env.local
 
 
 # IDE
